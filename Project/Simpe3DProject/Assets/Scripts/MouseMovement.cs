@@ -9,7 +9,7 @@ public class MouseMovement : MonoBehaviour {
  
      void FixedUpdate()
      {
-         Debug.Log(Input.GetAxis("Mouse X"));
+         //Debug.Log(Input.GetAxis("Mouse X"));
          float rotateHorizontal = Input.GetAxis("Mouse X");
          float rotateVertical = Input.GetAxis("Mouse Y");
          // Use transform.Rotate(-transform.up * rotateHorizontal * sensitivity) instead
