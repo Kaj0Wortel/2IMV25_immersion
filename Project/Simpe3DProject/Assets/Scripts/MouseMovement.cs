@@ -5,7 +5,7 @@ using UnityEngine;
 public class MouseMovement : MonoBehaviour {
 
      public GameObject player;
-     public float sensitivity;
+     public float sensitivity = 1;
  
      void FixedUpdate()
      {

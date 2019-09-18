@@ -4,23 +4,31 @@ using UnityEngine;
 
 
 /**
+ * This class is used to set the texture of an object.
  * 
  * @author Kaj Wortel
  */
-public class SetTexture : MonoBehaviour {
+public class SetTextures : MonoBehaviour {
     /**----------------------------------------
      * Constants.
      * ----------------------------------------
      */
-    Texture m_MainTexture, m_Normal, m_Metal;
     private Renderer _Render;
+
+    public GameObject target;
     
 
+    /**----------------------------------------
+     * Functions.
+     * ----------------------------------------
+     */
 	/**
 	 * Use this for initialization.
 	 */
 	void Start()
 	{
+        //_Render.material = new Material(Shader.Find("Shaders/Alpha-Diffuse.shader"));
+        //_Render.material.shader = Shader.Find("Transparent/Diffuse");
 		_Render = GetComponent<Renderer>();
 		/*
         //Fetch the Renderer from the GameObject
@@ -43,7 +51,7 @@ public class SetTexture : MonoBehaviour {
     public void setTexture(Texture tex)
 	{
         //_Render.material.enableKeyword("");
-        _Render.material.SetTexture("MainTex", tex);
+        _Render.material.mainTexture = tex;//_Render.material.SetTexture("MainTex", tex);
     }
 	
 	/**
