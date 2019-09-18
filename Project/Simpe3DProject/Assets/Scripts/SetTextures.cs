@@ -14,8 +14,6 @@ public class SetTextures : MonoBehaviour {
      * ----------------------------------------
      */
     private Renderer _Render;
-
-    public GameObject target;
     
 
     /**----------------------------------------
@@ -28,13 +26,13 @@ public class SetTextures : MonoBehaviour {
 	void Start()
 	{
 		_Render = GetComponent<Renderer>();
-        Texture2D texture = Resources.Load<Texture2D>("Textures/potato");
-        setTexture(texture);
+        //Texture2D texture = Resources.Load<Texture2D>("Textures/potato");
+        //setTexture(texture);
     }
     
     public void setTexture(Texture tex)
 	{
-        _Render.material.mainTexture = tex;//_Render.material.SetTexture("MainTex", tex);
+        _Render.material.mainTexture = tex;
     }
 	
 	/**
