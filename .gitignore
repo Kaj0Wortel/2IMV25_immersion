@@ -67,4 +67,4 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
-*/ProjectVersion.txt
+Project/Simpe3DProject/ProjectSettings/ProjectVersion.txt
