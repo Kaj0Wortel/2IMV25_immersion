@@ -13,6 +13,8 @@ public class TexKeyListener : MonoBehaviour {
      * Constants.
      * --------------------------------------------------------------------------------
      */
+	/** Array containing all main target objects to change the texture of. */
+	private static GameObject[] _MainTargetObjects;
 	/** Array containing all target objects to change the texture of. */
 	private static GameObject[] _TargetObjects;
 	/** The empty texture. */
@@ -25,7 +27,9 @@ public class TexKeyListener : MonoBehaviour {
      * Variables.
      * --------------------------------------------------------------------------------
      */
-	/** The tag to modify the objects of. */
+	/** The tag used to identify the main symbol objects to alter. */
+	public string mainObjectTag = "MainSymbol";
+	/** The tag used to identify the symbol objects to alter. */
 	public string objectTag = "Symbol";
 	/** The textures to use. */
 	public string[] textureStrings = new string[] {
@@ -50,7 +54,7 @@ public class TexKeyListener : MonoBehaviour {
 	 * Enum denoting the state of the script.
 	 */
 	public enum State {
-		INIT, SET, CLEAR
+		INIT, SHOW, SET, CLEAR
 	};
 
 
@@ -62,13 +66,25 @@ public class TexKeyListener : MonoBehaviour {
 	 * Initializes the values of the script.
 	 */
 	void Start() {
-		_TargetObjects = GameObject.FindGameObjectsWithTag(objectTag);
+		// Load textures.
 		_Empty = Resources.Load<Texture2D>("Textures/empty");
 		_Textures = new Texture2D[textureStrings.Length];
 		for (int i = 0; i < _Textures.Length; i++) {
 			_Textures[i] = Resources.Load<Texture2D>("Textures/" + textureStrings[i]);
 			if (_Textures[i] == null) {
 				Debug.LogError("Unable to load texture '" + textureStrings[i] + "'.");
+			}
+		}
+
+		// Load game objects.
+		_MainTargetObjects = GameObject.FindGameObjectsWithTag(mainObjectTag);
+		GameObject[] targets = GameObject.FindGameObjectsWithTag(objectTag);
+		_TargetObjects = new GameObject[_MainTargetObjects.Length + targets.Length];
+		for (int i = 0; i < _TargetObjects.Length; i++) {
+			if (i < targets.Length) {
+				_TargetObjects[i] = targets[i];
+			} else {
+				_TargetObjects[i] = _MainTargetObjects[i - targets.Length];
 			}
 		}
 	}
@@ -78,11 +94,12 @@ public class TexKeyListener : MonoBehaviour {
 	 */
 	void Update() {
 		if (Input.GetKeyDown("space")) {
-			if (_State == State.INIT) setRandomTextures();
-			else if (_State == State.CLEAR) init();
+			if (nextState() == State.SET) setRandomTextures();
+			else if (nextState() == State.INIT) init();
+			else if (nextState() == State.SHOW) show();
 
 		} else if (Input.GetKeyDown("y") || Input.GetKeyDown("n")) {
-			if (_State == State.SET) {
+			if (nextState() == State.CLEAR) {
 				bool found = Input.GetKeyDown("y");
 				float dt = Time.time - _Time;
 				if (found == tagetExists()) {
@@ -97,13 +114,33 @@ public class TexKeyListener : MonoBehaviour {
 	}
 
 	/**
+	 * @return The next state in chronological order (i.e. CLEAR -> INIT -> SHOW -> SET -> CLEAR).
+	 */
+	private State nextState() {
+		switch(_State) {
+			case State.INIT:
+				return State.SHOW;
+			case State.SHOW:
+				return State.SET;
+			case State.SET:
+				return State.CLEAR;
+			case State.CLEAR:
+				return State.INIT;
+			default:
+				return State.CLEAR;
+		}
+	}
+
+	/**
 	 * Sets the texture of the component with the given index.
 	 * 
 	 * @param tex The new texture of the object.
 	 * @param i The index of the game object to set the texture of. Must be a valid index.
+	 * @param all Whether to set the index relative to all objects, or only the main objects.
 	 */
-	private void setTex(Texture2D tex, int i) {
-		SetTextures st = _TargetObjects[i].GetComponent<SetTextures>();
+	private void setTex(Texture2D tex, int i, bool all) {
+		SetTextures st = (all ? _TargetObjects[i] : _MainTargetObjects[i])
+				.GetComponent<SetTextures>();
 		if (st == null) {
 			Debug.LogError("Expected the game object with label '" + objectTag
 					+ "' to have the script 'SetTextures', but '" + _TargetObjects[i]
@@ -126,6 +163,16 @@ public class TexKeyListener : MonoBehaviour {
 	}
 
 	/**
+	 * Shows the symbol to look for at the main target objects.
+	 */
+	public void show() {
+		for (int i = 0; i < _MainTargetObjects.Length; i++) {
+			setTex(getTargetSymbol(), i, false);
+		}
+		_State = State.SHOW;
+	}
+
+	/**
 	 * Randomly selects one of the remaining textures for each game object,
 	 * except for the object to search for, if any. Additionally starts
 	 * the timer.
@@ -144,10 +191,10 @@ public class TexKeyListener : MonoBehaviour {
 				tex = _Textures[symbolIndex];
 			}
 
-			setTex(tex, i);
+			setTex(tex, i, true);
 		}
-		_State = State.SET;
 		_Time = Time.time;
+		_State = State.SET;
 	}
 
 	/**
@@ -157,7 +204,7 @@ public class TexKeyListener : MonoBehaviour {
 		_TargetObjectIndex = -1;
 		_TargetSymbolIndex = -1;
 		for (int i = 0; i < _TargetObjects.Length; i++) {
-			setTex(_Empty, i);
+			setTex(_Empty, i, true);
 		}
 		_State = State.CLEAR;
 	}
