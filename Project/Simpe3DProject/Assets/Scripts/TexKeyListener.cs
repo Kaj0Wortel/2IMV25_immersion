@@ -32,14 +32,14 @@ public class TexKeyListener : MonoBehaviour {
 		"potato", "croissant", "smile"
 	};
 
-	/** Denotes whether the space bar was pressed in the previous update cycle. */
-	private bool _SpaceDown = false;
 	/** Denotes the index of the symbol to search for. */
 	public int _TargetSymbolIndex = -1;
 	/** Denotes the index of the current target symbol, or {@code -1} if it doesn't exist. */
 	public int _TargetObjectIndex = -1;
 	/** The state of the script. */
 	public State _State = State.CLEAR;
+	/** The time needed for the search so far. */
+	public float _Time = 0f;
 
 
     /* --------------------------------------------------------------------------------
@@ -58,6 +58,9 @@ public class TexKeyListener : MonoBehaviour {
      * Functions.
      * --------------------------------------------------------------------------------
      */
+	/**
+	 * Initializes the values of the script.
+	 */
 	void Start() {
 		_TargetObjects = GameObject.FindGameObjectsWithTag(objectTag);
 		_Empty = Resources.Load<Texture2D>("Textures/empty");
@@ -71,31 +74,25 @@ public class TexKeyListener : MonoBehaviour {
 	}
 	
 	/**
-	 * Checks if the function key is pressed. If it is, then a texture to search for
-	 * is selected, and the remaining textures are randomly chosen for the other
-	 * symbol entities. Then with a 50% chance, a random symbol entity is selected
-	 * and the texture to search for is set.
+	 * Updates the textures of the objects with the tag accordingly.
 	 */
 	void Update() {
 		if (Input.GetKeyDown("space")) {
-			if (_SpaceDown) return;
-			_SpaceDown = true;
-			
-			if (_State == State.INIT) {
-				setRandomTextures();
+			if (_State == State.INIT) setRandomTextures();
+			else if (_State == State.CLEAR) init();
 
-			} else if (_State == State.SET) {
+		} else if (Input.GetKeyDown("y") || Input.GetKeyDown("n")) {
+			if (_State == State.SET) {
+				bool found = Input.GetKeyDown("y");
+				float dt = Time.time - _Time;
+				if (found == tagetExists()) {
+					Debug.Log("The user was right! (time = " + dt + "s)");
+				} else {
+					Debug.Log("The user was wrong! (time = " + dt + "s)");
+				}
+
 				clear();
-
-			} else if (_State == State.CLEAR) {
-				init();
-
-			} else {
-				Debug.LogError("ERROR: invalid enum state value: " + _State);
 			}
-			
-		} else {
-			_SpaceDown = false;
 		}
 	}
 
@@ -130,7 +127,8 @@ public class TexKeyListener : MonoBehaviour {
 
 	/**
 	 * Randomly selects one of the remaining textures for each game object,
-	 * except for the object to search for, if any.
+	 * except for the object to search for, if any. Additionally starts
+	 * the timer.
 	 */
 	public void setRandomTextures() {
 		for (int i = 0; i < _TargetObjects.Length; i++) {
@@ -149,6 +147,7 @@ public class TexKeyListener : MonoBehaviour {
 			setTex(tex, i);
 		}
 		_State = State.SET;
+		_Time = Time.time;
 	}
 
 	/**
@@ -175,7 +174,7 @@ public class TexKeyListener : MonoBehaviour {
 	 * @return {@code true} if the target to search for exists. {@code false} otherwise.
 	 */
 	public bool tagetExists() {
-		return (_TargetSymbolIndex != -1);
+		return (_TargetObjectIndex != -1);
 	}
 
 	/**
