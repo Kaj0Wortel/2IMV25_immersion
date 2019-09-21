@@ -9,39 +9,29 @@ using UnityEngine;
  * @author Kaj Wortel
  */
 public class SetTextures : MonoBehaviour {
-    /**----------------------------------------
+    /* --------------------------------------------------------------------------------
      * Constants.
-     * ----------------------------------------
+     * --------------------------------------------------------------------------------
      */
     private Renderer _Render;
     
 
-    /**----------------------------------------
+    /* --------------------------------------------------------------------------------
      * Functions.
-     * ----------------------------------------
+     * --------------------------------------------------------------------------------
      */
 	/**
 	 * Use this for initialization.
 	 */
-	void Start()
-	{
+	void Start() {
 		_Render = GetComponent<Renderer>();
         //Texture2D texture = Resources.Load<Texture2D>("Textures/potato");
         //setTexture(texture);
     }
     
-    public void setTexture(Texture tex)
-	{
+    public void setTexture(Texture tex){
         _Render.material.mainTexture = tex;
     }
-	
-	/**
-	 *  Update is called once per frame.
-	 */
-	void Update()
-	{
-		
-	}
 	
 	
 }
