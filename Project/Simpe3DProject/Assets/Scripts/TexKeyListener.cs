@@ -27,7 +27,7 @@ public class TexKeyListener : MonoBehaviour {
      */
 	/** The tag to modify the objects of. */
 	public string objectTag = "Symbol";
-
+	/** The textures to use. */
 	public string[] textureStrings = new string[] {
 		"potato", "croissant", "smile"
 	};
