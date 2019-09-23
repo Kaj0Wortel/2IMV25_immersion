@@ -33,7 +33,8 @@ public class TexKeyListener : MonoBehaviour {
 	public string objectTag = "Symbol";
 	/** The textures to use. */
 	public string[] textureStrings = new string[] {
-		"potato", "croissant", "smile"
+		"Letters/a", "Letters/k", "Letters/n", "Letters/m", "Letters/v",
+		"Letters/w", "Letters/x", "Letters/y", "Letters/z"
 	};
 
 	/** Denotes the index of the symbol to search for. */
