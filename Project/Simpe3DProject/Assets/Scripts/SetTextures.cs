@@ -13,6 +13,7 @@ public class SetTextures : MonoBehaviour {
      * Constants.
      * --------------------------------------------------------------------------------
      */
+     /** The render object of this game object. */
     private Renderer _Render;
     
 
@@ -25,12 +26,20 @@ public class SetTextures : MonoBehaviour {
 	 */
 	void Start() {
 		_Render = GetComponent<Renderer>();
-        //Texture2D texture = Resources.Load<Texture2D>("Textures/potato");
-        //setTexture(texture);
     }
     
+    /**
+     * Sets the given texture to the object.
+     */
     public void setTexture(Texture tex){
         _Render.material.mainTexture = tex;
+    }
+
+    /**
+     * @return {@code true} if the object is visible.
+     */
+    public bool isVisible() {
+        return _Render.isVisible;
     }
 	
 	

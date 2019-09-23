@@ -102,8 +102,12 @@ public class TexKeyListener : MonoBehaviour {
 			if (nextState() == State.CLEAR) {
 				bool found = Input.GetKeyDown("y");
 				float dt = Time.time - _Time;
-				if (found == tagetExists()) {
-					Debug.Log("The user was right! (time = " + dt + "s)");
+				if (found == targetExists()) {
+					if (!targetExists() || isTargetVisible()) {
+						Debug.Log("The user was right! (time = " + dt + "s)");
+					} else {
+						Debug.Log("The user was right, but the target wasn't visible! (time = " + dt + "s)");
+					}
 				} else {
 					Debug.Log("The user was wrong! (time = " + dt + "s)");
 				}
@@ -139,16 +143,23 @@ public class TexKeyListener : MonoBehaviour {
 	 * @param all Whether to set the index relative to all objects, or only the main objects.
 	 */
 	private void setTex(Texture2D tex, int i, bool all) {
-		SetTextures st = (all ? _TargetObjects[i] : _MainTargetObjects[i])
-				.GetComponent<SetTextures>();
-		if (st == null) {
-			Debug.LogError("Expected the game object with label '" + objectTag
-					+ "' to have the script 'SetTextures', but '" + _TargetObjects[i]
-					+ "' didn't have this.");
-			
-		} else {
+		SetTextures st = getSetTextures(all ? _TargetObjects[i] : _MainTargetObjects[i]);
+		if (st != null) {
 			st.setTexture(tex);
 		}
+	}
+
+	/**
+	 * @return The {@code SetTextures} script of the game object, or {@code null} if it doesn't have any.
+	 */
+	private SetTextures getSetTextures(GameObject obj) {
+		SetTextures st = obj.GetComponent<SetTextures>();
+		if (st == null) {
+			Debug.LogError("Expected the game object with label '" + objectTag
+					+ "' to have the script 'SetTextures', but '" + obj
+					+ "' didn't have this.");
+		}
+		return st;
 	}
 
 	/**
@@ -214,13 +225,14 @@ public class TexKeyListener : MonoBehaviour {
 	 */
 	public GameObject getTargetObject() {
 		if (_TargetObjectIndex == -1) return null;
-		else return _TargetObjects[_TargetObjectIndex];
+		else if (_TargetObjectIndex < _TargetObjects.Length) return _TargetObjects[_TargetObjectIndex];
+		else return _MainTargetObjects[_TargetObjectIndex - _TargetObjects.Length];
 	}
 
 	/**
 	 * @return {@code true} if the target to search for exists. {@code false} otherwise.
 	 */
-	public bool tagetExists() {
+	public bool targetExists() {
 		return (_TargetObjectIndex != -1);
 	}
 
@@ -230,6 +242,17 @@ public class TexKeyListener : MonoBehaviour {
 	public Texture2D getTargetSymbol() {
 		if (_TargetSymbolIndex == -1) return null;
 		else return _Textures[_TargetSymbolIndex];
+	}
+
+	/**
+	 * Checks if the target is visible.
+	 */
+	public bool isTargetVisible() {
+		GameObject obj = getTargetObject();
+		if (obj == null) return false;
+		SetTextures st = getSetTextures(obj);
+		if (st == null) return false;
+		return st.isVisible();
 	}
 
 
