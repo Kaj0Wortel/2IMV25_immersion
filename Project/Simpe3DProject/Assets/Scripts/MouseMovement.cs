@@ -2,23 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MouseMovement : MonoBehaviour {
+public class MouseMovement : MonoBehaviour
+{
 
-    public GameObject player;
-    public float sensitivity = 1;
-    
-    void FixedUpdate()
+    public float speedH = 2.0f;
+    public float speedV = 2.0f;
+
+    private float yaw = 0.0f;
+    private float pitch = 0.0f;
+
+
+
+    // Use this for initialization
+    void Start()
     {
-        //Debug.Log(Input.GetAxis("Mouse X"));
-        float rotateHorizontal = Input.GetAxis("Mouse X");
-        float rotateVertical = Input.GetAxis("Mouse Y");
-        // Use transform.Rotate(-transform.up * rotateHorizontal * sensitivity) instead
-        // if you dont want the camera to rotate around the player
-        transform.RotateAround(player.transform.position, -Vector3.up, rotateHorizontal * sensitivity);
-        // Again, use transform.Rotate(transform.right * rotateVertical * sensitivity)
-        // if you don't want the camera to rotate around the player
-        transform.RotateAround(Vector3.zero, transform.right, rotateVertical * sensitivity);
+
     }
 
-    
+    // Update is called once per frame
+    void Update()
+    {
+
+        yaw += speedH * Input.GetAxis("Mouse X");
+        pitch -= speedV * Input.GetAxis("Mouse Y");
+
+        transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
+
+    }
 }
