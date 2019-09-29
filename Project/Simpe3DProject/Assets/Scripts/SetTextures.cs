@@ -15,17 +15,25 @@ public class SetTextures : MonoBehaviour {
      */
      /** The render object of this game object. */
     private Renderer _Render;
-    
+
+
+    /* --------------------------------------------------------------------------------
+     * Variables.
+     * --------------------------------------------------------------------------------
+     */
+    public Texture2D DefaultTex;
+
 
     /* --------------------------------------------------------------------------------
      * Functions.
      * --------------------------------------------------------------------------------
      */
-	/**
+    /**
 	 * Use this for initialization.
 	 */
-	void Start() {
+    void Start() {
 		_Render = GetComponent<Renderer>();
+        setTexture(DefaultTex);
     }
     
     /**

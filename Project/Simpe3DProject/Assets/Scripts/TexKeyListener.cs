@@ -88,11 +88,6 @@ public class TexKeyListener : MonoBehaviour {
 				_TargetObjects[i] = _MainTargetObjects[i - targets.Length];
 			}
 		}
-
-        // Set empty texture by default.
-        for (int i = 0; i < _TargetObjects.Length; i++) {
-            setTex(_Empty, i, true);
-        }
 	}
 	
 	/**
