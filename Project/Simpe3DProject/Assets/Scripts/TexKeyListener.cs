@@ -88,20 +88,52 @@ public class TexKeyListener : MonoBehaviour {
 				_TargetObjects[i] = _MainTargetObjects[i - targets.Length];
 			}
 		}
+
+        // Set empty texture by default.
+        for (int i = 0; i < _TargetObjects.Length; i++) {
+            setTex(_Empty, i, true);
+        }
 	}
 	
 	/**
 	 * Updates the textures of the objects with the tag accordingly.
 	 */
 	void Update() {
-		if (Input.GetKeyDown("space")) {
-			if (nextState() == State.SET) setRandomTextures();
-			else if (nextState() == State.INIT) init();
-			else if (nextState() == State.SHOW) show();
+        if (nextState() == State.SET) {
+            if (Input.GetButtonDown("Next")) setRandomTextures();
 
-		} else if (Input.GetKeyDown("y") || Input.GetKeyDown("n")) {
+        } else if (nextState() == State.INIT) {
+            if (Input.GetButtonDown("Next")) {
+                init();
+                show();
+            }
+
+        } else if (nextState() == State.SHOW) {
+            show();
+
+        } else if (nextState() == State.CLEAR) {
+            bool found = Input.GetButtonDown("Found");
+            if (found || Input.GetButtonDown("Missing")) {
+                float dt = Time.time - _Time;
+                bool exists = targetExists();
+                if (found == exists) {
+                    if (!exists || isTargetVisible()) {
+                        Debug.Log("The user was right! (time = " + dt + "s)");
+                    } else {
+                        Debug.Log("The user was right, but the target wasn't visible! (time = " + dt + "s)");
+                    }
+
+                } else {
+                    Debug.Log("The user was wrong! (time = " + dt + "s)");
+                }
+
+                clear();
+            }
+        }
+            /*
+        } else if (Input.GetButtonDown("Found") || Input.GetButtonDown("Missing")) {
 			if (nextState() == State.CLEAR) {
-				bool found = Input.GetKeyDown("y");
+				bool found = Input.GetButtonDown("Found");
 				float dt = Time.time - _Time;
 				if (found == targetExists()) {
 					if (!targetExists() || isTargetVisible()) {
@@ -115,7 +147,7 @@ public class TexKeyListener : MonoBehaviour {
 
 				clear();
 			}
-		}
+		}*/
 	}
 
 	/**
