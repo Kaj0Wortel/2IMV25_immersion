@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
 
 /**
  * Creates a key listener which changes the texture of the component at random.
@@ -36,6 +37,7 @@ public class TexKeyListener : MonoBehaviour {
 		"Letters/a", "Letters/k", "Letters/n", "Letters/m", "Letters/v",
 		"Letters/w", "Letters/x", "Letters/y", "Letters/z"
 	};
+    public Controller controller = Controller.DETECT;
 
 	/** Denotes the index of the symbol to search for. */
 	public int _TargetSymbolIndex = -1;
@@ -57,6 +59,13 @@ public class TexKeyListener : MonoBehaviour {
 	public enum State {
 		INIT, SHOW, SET, CLEAR
 	};
+
+    /**
+     * Enum denoting the different type of controllers.
+     */
+    public enum Controller {
+        KEYBOARD_ONLY, DETECT, OCULUS_RIFT, VIVE
+    }
 
 
     /* --------------------------------------------------------------------------------
@@ -89,16 +98,17 @@ public class TexKeyListener : MonoBehaviour {
 			}
 		}
 	}
-	
-	/**
+
+    /**
 	 * Updates the textures of the objects with the tag accordingly.
 	 */
-	void Update() {
+    void Update() {
+        checkController();
         if (nextState() == State.SET) {
-            if (Input.GetButtonDown("Next")) setRandomTextures();
+            if (nextPressed()) setRandomTextures();
 
         } else if (nextState() == State.INIT) {
-            if (Input.GetButtonDown("Next")) {
+            if (nextPressed()) {
                 init();
                 show();
             }
@@ -107,43 +117,58 @@ public class TexKeyListener : MonoBehaviour {
             show();
 
         } else if (nextState() == State.CLEAR) {
-            bool found = Input.GetButtonDown("Found");
-            if (found || Input.GetButtonDown("Missing")) {
+            bool found = foundPressed();
+            if (found || missingPressed()) {
                 float dt = Time.time - _Time;
                 bool exists = targetExists();
-                if (found == exists) {
-                    if (!exists || isTargetVisible()) {
-                        Debug.Log("The user was right! (time = " + dt + "s)");
-                    } else {
-                        Debug.Log("The user was right, but the target wasn't visible! (time = " + dt + "s)");
-                    }
-
+                StringBuilder sb = new StringBuilder();
+                sb.Append("expected=");
+                sb.Append(exists);
+                sb.Append(";answer=");
+                sb.Append(found);
+                sb.Append(";correct=");
+                sb.Append(exists == found);
+                sb.Append(";time=");
+                sb.Append(dt);
+                sb.Append(";visible=");
+                if (targetExists()) {
+                    sb.Append(isTargetVisible());
                 } else {
-                    Debug.Log("The user was wrong! (time = " + dt + "s)");
+                    sb.Append("ignore");
                 }
+                string result = sb.ToString();
+                Debug.Log(result);
 
                 clear();
             }
         }
-            /*
-        } else if (Input.GetButtonDown("Found") || Input.GetButtonDown("Missing")) {
-			if (nextState() == State.CLEAR) {
-				bool found = Input.GetButtonDown("Found");
-				float dt = Time.time - _Time;
-				if (found == targetExists()) {
-					if (!targetExists() || isTargetVisible()) {
-						Debug.Log("The user was right! (time = " + dt + "s)");
-					} else {
-						Debug.Log("The user was right, but the target wasn't visible! (time = " + dt + "s)");
-					}
-				} else {
-					Debug.Log("The user was wrong! (time = " + dt + "s)");
-				}
-
-				clear();
-			}
-		}*/
 	}
+
+    /**
+     * Checks if the current controller is still selected.
+     * Note that this function does NOT detect if a controller is disconnected.
+     * It WILL detect a controller change if, and only if, the value of
+     * {@link #controller} has been reset to {@link Controller#DETECT}.
+     */
+    private void checkController() {
+        if (controller == Controller.DETECT) {
+            string[] data = Input.GetJoystickNames();
+            for (int i = 0; i < data.Length; i++) {
+                if (data[i].IndexOf("oculus", System.StringComparison.CurrentCultureIgnoreCase) != -1) {
+                    controller = Controller.OCULUS_RIFT;
+                    break;
+
+                } else if (data[i].IndexOf("vive", System.StringComparison.CurrentCultureIgnoreCase) != -1) {
+                    controller = Controller.VIVE;
+                    break;
+                }
+            }
+            if (controller == Controller.DETECT) {
+                controller = Controller.KEYBOARD_ONLY;
+            }
+            Debug.Log("Controller set to '" + controller + "'.");
+        }
+    }
 
 	/**
 	 * @return The next state in chronological order (i.e. CLEAR -> INIT -> SHOW -> SET -> CLEAR).
@@ -282,6 +307,36 @@ public class TexKeyListener : MonoBehaviour {
 		if (st == null) return false;
 		return st.isVisible();
 	}
+    
+    /**
+     * @return {@code true} if the button for the {@code next} action has been pressed.
+     *     {@code false otherwise.
+     */
+    private bool nextPressed() {
+        return Input.GetButtonDown("Next") ||
+                (controller == Controller.OCULUS_RIFT && Input.GetButtonDown("Next Oculus")) ||
+                (controller == Controller.VIVE && Input.GetButtonDown("Next VIVE"));
+    }
+
+    /**
+     * @return {@code true} if the button for the {@code found} action has been pressed.
+     *     {@code false otherwise.
+     */
+    private bool foundPressed() {
+        return Input.GetButtonDown("Found") ||
+                (controller == Controller.OCULUS_RIFT && Input.GetButtonDown("Found Oculus")) ||
+                (controller == Controller.VIVE && Input.GetButtonDown("Found VIVE"));
+    }
+
+    /**
+     * @return {@code true} if the button for the {@code missing} action has been pressed.
+     *     {@code false otherwise.
+     */
+    private bool missingPressed() {
+        return Input.GetButtonDown("Missing") ||
+                (controller == Controller.OCULUS_RIFT && Input.GetButtonDown("Missing Oculus")) ||
+                (controller == Controller.VIVE && Input.GetButtonDown("Missing VIVE"));
+    }
 
 
 }
