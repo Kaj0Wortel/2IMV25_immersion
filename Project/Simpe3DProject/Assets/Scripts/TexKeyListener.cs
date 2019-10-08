@@ -22,6 +22,8 @@ public class TexKeyListener : MonoBehaviour {
 	private static Texture2D _Empty;
 	/** Array containing all textures to change to. */
 	private static Texture2D[] _Textures;
+	/** The static script object. */
+	private static GameObject _StaticScriptObject;
 
 
     /* --------------------------------------------------------------------------------
@@ -97,6 +99,8 @@ public class TexKeyListener : MonoBehaviour {
 				_TargetObjects[i] = _MainTargetObjects[i - targets.Length];
 			}
 		}
+		
+		_StaticScriptObject = GameObject.Find("StaticScriptObject");
 	}
 
     /**
@@ -136,8 +140,13 @@ public class TexKeyListener : MonoBehaviour {
                 } else {
                     sb.Append("ignore");
                 }
-                string result = sb.ToString();
-                Debug.Log(result);
+
+				string result = sb.ToString();
+				DataWriter dw = _StaticScriptObject.GetComponent<DataWriter>();
+				if (dw != null) {
+					dw.WriteLine(result);
+				}
+				Debug.Log(sb.ToString());
 
                 clear();
             }
