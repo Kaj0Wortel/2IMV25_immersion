@@ -1,0 +1,71 @@
+Start test @9-10-2019 10:25:39;MOVING
+expected=True;answer=True;correct=True;time=13,26823;visible=True
+expected=True;answer=True;correct=True;time=4,142839;visible=True
+expected=True;answer=True;correct=True;time=11,66863;visible=True
+expected=False;answer=False;correct=True;time=49,13326;visible=ignore
+expected=True;answer=True;correct=True;time=25,51212;visible=True
+expected=False;answer=False;correct=True;time=27,34466;visible=ignore
+expected=False;answer=False;correct=True;time=24,28302;visible=ignore
+End test @9-10-2019 10:28:37;MOVING
+Start test @9-10-2019 10:41:40;MOVING
+expected=True;answer=True;correct=True;time=20,35013;visible=True
+expected=False;answer=False;correct=True;time=25,70331;visible=ignore
+expected=False;answer=False;correct=True;time=31,53109;visible=ignore
+expected=False;answer=True;correct=False;time=20,69622;visible=ignore
+expected=False;answer=False;correct=True;time=26,4833;visible=ignore
+expected=True;answer=True;correct=True;time=44,18497;visible=True
+expected=False;answer=False;correct=True;time=33,10608;visible=ignore
+expected=False;answer=False;correct=True;time=27,43474;visible=ignore
+End test @9-10-2019 10:45:59;MOVING
+Start test @9-10-2019 10:58:21;MOVING
+expected=False;answer=False;correct=True;time=24,78434;visible=ignore
+expected=False;answer=False;correct=True;time=20,94714;visible=ignore
+expected=False;answer=False;correct=True;time=20,54269;visible=ignore
+expected=False;answer=True;correct=False;time=31,99198;visible=ignore
+expected=False;answer=False;correct=True;time=39,18262;visible=ignore
+expected=False;answer=False;correct=True;time=34,60297;visible=ignore
+expected=True;answer=True;correct=True;time=31,19676;visible=True
+expected=True;answer=True;correct=True;time=3,068619;visible=True
+expected=True;answer=True;correct=True;time=33,07385;visible=True
+expected=False;answer=False;correct=True;time=31,09528;visible=ignore
+expected=False;answer=False;correct=True;time=37,25003;visible=ignore
+expected=True;answer=False;correct=False;time=28,24774;visible=True
+expected=True;answer=True;correct=True;time=16,59821;visible=True
+End test @9-10-2019 11:05:09;MOVING
+Start test @9-10-2019 11:21:10;MOVING
+expected=True;answer=True;correct=True;time=15,87124;visible=True
+expected=False;answer=False;correct=True;time=17,96784;visible=ignore
+expected=False;answer=False;correct=True;time=13,2241;visible=ignore
+expected=True;answer=True;correct=True;time=10,87947;visible=True
+expected=True;answer=False;correct=False;time=16,4081;visible=True
+expected=False;answer=False;correct=True;time=20,79913;visible=ignore
+expected=False;answer=False;correct=True;time=19,8131;visible=ignore
+expected=False;answer=False;correct=True;time=11,42421;visible=ignore
+expected=False;answer=False;correct=True;time=18,29485;visible=ignore
+expected=True;answer=True;correct=True;time=8,500381;visible=True
+expected=True;answer=True;correct=True;time=8,512466;visible=True
+expected=True;answer=False;correct=False;time=18,74348;visible=False
+expected=True;answer=True;correct=True;time=11,57181;visible=True
+expected=True;answer=True;correct=True;time=6,802231;visible=True
+expected=True;answer=True;correct=True;time=9,283585;visible=True
+End test @9-10-2019 11:25:10;MOVING
+Start test @9-10-2019 11:36:27;MOVING
+expected=False;answer=True;correct=False;time=9,146735;visible=ignore
+expected=False;answer=False;correct=True;time=8,745712;visible=ignore
+expected=False;answer=False;correct=True;time=13,32603;visible=ignore
+expected=True;answer=False;correct=False;time=14,1185;visible=False
+expected=True;answer=True;correct=True;time=0,8497009;visible=True
+expected=False;answer=False;correct=True;time=19,87067;visible=ignore
+expected=True;answer=True;correct=True;time=2,011147;visible=True
+expected=True;answer=True;correct=True;time=1,406563;visible=True
+expected=True;answer=False;correct=False;time=19,43485;visible=False
+expected=True;answer=True;correct=True;time=11,57015;visible=True
+expected=True;answer=True;correct=True;time=1,832336;visible=True
+expected=True;answer=True;correct=True;time=15,96172;visible=True
+expected=False;answer=False;correct=True;time=15,71457;visible=ignore
+expected=True;answer=True;correct=True;time=4,702072;visible=True
+expected=True;answer=False;correct=False;time=15,79317;visible=False
+expected=False;answer=False;correct=True;time=18,21877;visible=ignore
+expected=True;answer=True;correct=True;time=16,9552;visible=True
+expected=False;answer=False;correct=True;time=19,90466;visible=ignore
+End test @9-10-2019 11:40:46;MOVING
