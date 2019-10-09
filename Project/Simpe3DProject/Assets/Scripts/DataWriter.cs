@@ -15,15 +15,22 @@ public class DataWriter : MonoBehaviour {
     private StreamWriter sw;
     
     /** The file to write the data to. */
-    public string fileName = "results.txt";
+    //public string fileName = "results.txt";
 
+    public Type type = Type.IN_PLACE;
+
+    public enum Type {
+        IN_PLACE, MOVING
+    }
 
     /**
      * Sets up the writer.
      */
     void Start() {
-        sw = new StreamWriter(_PATH + fileName, true);
-        sw.WriteLine("Start test @" + DateTime.Now);
+        sw = new StreamWriter(_PATH + (type == Type.IN_PLACE
+            ? "results_in_place.txt"
+            : "results_moving.txt"), true);
+        sw.WriteLine("Start test @" + DateTime.Now + ";" + type.ToString());
     }
 
     /**
@@ -37,7 +44,7 @@ public class DataWriter : MonoBehaviour {
      * Writes the end message and closes the stream.
      */
     public void OnApplicationQuit() {
-        sw.WriteLine("End test @" + DateTime.Now);
+        sw.WriteLine("End test @" + DateTime.Now + ";" + type.ToString());
         sw.Close();
     }
 
